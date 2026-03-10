@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madan Safety Shield Product Catalogue</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+}
+
+/* BACK BUTTON */
+
+.back-btn{
+
+position:fixed;
+top:10px;
+left:10px;
+
+background:black;
+color:red;
+
+padding:4px 8px;
+
+font-size:20px;
+font-weight:bold;
+
+text-decoration:none;
+
+border:2px solid red;
+border-radius:8px;
+
+z-index:999;
+
+text-shadow:
+0 0 10px red,
+0 0 20px red,
+0 0 30px orange;
+
+box-shadow:
+0 0 10px red,
+0 0 20px red;
+
+transition:0.3s;
+
+}
+
+.back-btn:hover{
+
+background:red;
+color:white;
+
+text-shadow:
+0 0 10px white,
+0 0 20px red,
+0 0 30px orange;
+
+}
+
+/* HEADER */
+
+header{
+text-align:center;
+padding:30px;
+background:black;
+border-bottom:2px solid red;
+}
+
+/* SECTION */
+
+.section{
+padding:60px 10%;
+text-align:center;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+margin-top:40px;
+}
+
+/* PRODUCT CARD */
+
+.card{
+background:#1a1a1a;
+border-radius:8px;
+overflow:hidden;
+cursor:pointer;
+}
+
+.card img{
+width:100%;
+height:220px;
+object-fit:cover;
+transition:0.4s;
+}
+
+.card img:hover{
+transform:scale(1.05);
+}
+
+/* ZOOM MODAL */
+
+.modal{
+display:none;
+position:fixed;
+z-index:999;
+padding-top:80px;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+}
+
+.modal img{
+display:block;
+margin:auto;
+max-width:90%;
+max-height:80%;
+}
+
+.close{
+position:absolute;
+top:30px;
+right:40px;
+font-size:40px;
+color:white;
+cursor:pointer;
+}
+
+/* ENQUIRY BUTTON */
+
+.enquiry{
+text-align:center;
+margin-top:60px;
+}
+
+.btn{
+background:red;
+color:white;
+padding:15px 40px;
+text-decoration:none;
+border-radius:5px;
+font-size:18px;
+}
+
+footer{
+text-align:center;
+padding:25px;
+background:black;
+margin-top:40px;
+border-top:1px solid #222;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="back-btn">⬅ BACK</a>
+
+<header>
+
+<h1>Madan Safety Shield Product Catalogue</h1>
+<p>Click image to zoom</p>
+
+</header>
+
+<section class="section">
+
+<div class="grid">
+
+<div class="card">
+<img src="https://i.ibb.co/BVSRpRrx/file-000000000bbc720ba15b1762b68c075a.png" onclick="zoom(this)">
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/Y4s1xTHz/file-000000004eb8720bb5cec5852828ed21.png" onclick="zoom(this)">
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/kf7fTB5/file-000000005d1c720baf93c258a9b0d459.jpg" onclick="zoom(this)">
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/QFMhj6Dt/file-00000000a9bc720b99e0a4926d116953.jpg" onclick="zoom(this)">
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/r2cC1sBb/file-000000000cfc720bad42cf40e32b95d5.jpg" onclick="zoom(this)">
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/fdkxg3Lx/file-0000000080a4720bb25ccbcb1a4249b4.jpg" onclick="zoom(this)">
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/QjHC6r6Y/file-00000000c5b8720bb95909cea0684ee4.png" onclick="zoom(this)">
+</div>
+
+<div class="card">
+<img src="https://i.ibb.co/ZRfjN8YN/file-000000000c74720ba856d567e7628ac4.jpg" onclick="zoom(this)">
+</div>
+
+</div>
+
+<!-- ENQUIRY BUTTON -->
+
+<div class="enquiry">
+
+<a href="https://wa.me/918015828265?text=Hello%20I%20saw%20your%20product%20catalogue%20and%20need%20more%20details" class="btn">
+
+Product Enquiry
+
+</a>
+
+</div>
+
+</section>
+
+<!-- ZOOM MODAL -->
+
+<div id="modal" class="modal">
+
+<span class="close" onclick="closeModal()">×</span>
+
+<img id="modalImg">
+
+</div>
+
+<footer>
+
+© 2026 Madan Safety Shield
+
+</footer>
+
+<script>
+
+function zoom(img){
+
+document.getElementById("modal").style.display="block";
+document.getElementById("modalImg").src=img.src;
+
+}
+
+function closeModal(){
+
+document.getElementById("modal").style.display="none";
+
+}
+
+</script>
+
+</body>
+</html>

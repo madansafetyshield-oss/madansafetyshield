@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AMC Quotation Generator | Madan Safety Shield</title><style>
+.back-btn{
+position:fixed;
+top:10px;
+left:10px;
+background:black;
+color:red;
+padding:6px 12px;
+font-size:20px;
+font-weight:bold;
+text-decoration:none;
+border:2px solid red;
+border-radius:8px;
+z-index:999;
+}
+body{
+margin:0;
+font-family:Arial;
+color:white;
+
+background:
+linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.9)),
+url("https://i.ibb.co/yFxbVnQ5/file-000000008c1472099ad87677a6e7f939.png");
+
+background-size:cover;
+background-position:center;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:40px;
+}
+
+h1{
+text-align:center;
+color:#ff3b3b;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border-radius:5px;
+border:none;
+}
+
+button{
+background:#ff3b3b;
+color:white;
+padding:12px 30px;
+border:none;
+cursor:pointer;
+font-size:16px;
+border-radius:4px;
+margin-top:15px;
+}
+
+.report{
+margin-top:30px;
+background:#111;
+padding:25px;
+border-radius:8px;
+}
+
+.letter{
+background:white;
+color:black;
+padding:30px;
+margin-top:20px;
+}
+
+.logo{
+width:120px;
+}
+
+.whatsapp{
+background:#25D366;
+color:white;
+padding:12px 25px;
+text-decoration:none;
+display:inline-block;
+margin-top:10px;
+border-radius:5px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+table,th,td{
+border:1px solid #444;
+}
+
+th{
+background:#222;
+color:white;
+}
+
+th,td{
+padding:8px;
+text-align:center;
+}
+
+</style></head><body><div class="container"><h1>AMC Quotation Generator</h1><input id="client" placeholder="Client Name">
+<a href="index.html" class="back-btn">⬅ BACK</a>
+<input id="company" placeholder="Company Name">
+<input id="mobile" placeholder="Mobile Number"><h3>Equipment Quantity</h3><input id="ext" type="number" placeholder="Fire Extinguisher">
+<input id="mod" type="number" placeholder="Modular Extinguisher">
+<input id="smoke" type="number" placeholder="Smoke Detector">
+<input id="mcp" type="number" placeholder="Manual Call Point">
+<input id="siren" type="number" placeholder="Siren">
+<input id="light" type="number" placeholder="Emergency Light">
+<input id="hose" type="number" placeholder="Hose Reel Drum">
+<input id="sprinkler" type="number" placeholder="Sprinkler">
+<input id="panel" type="number" placeholder="Fire Alarm Panel Board">
+<input id="hpanel" type="number" placeholder="Hydrant Panel Board"><button onclick="generate()">Generate AMC Quotation</button>
+
+<div id="report" class="report"></div></div><script>
+
+function generate(){
+
+let client=document.getElementById("client").value
+let company=document.getElementById("company").value
+let mobile=document.getElementById("mobile").value
+
+let ext=document.getElementById("ext").value||0
+let mod=document.getElementById("mod").value||0
+let smoke=document.getElementById("smoke").value||0
+let mcp=document.getElementById("mcp").value||0
+let siren=document.getElementById("siren").value||0
+let light=document.getElementById("light").value||0
+let hose=document.getElementById("hose").value||0
+let sprinkler=document.getElementById("sprinkler").value||0
+let panel=document.getElementById("panel").value||0
+let hpanel=document.getElementById("hpanel").value||0
+
+function calc(q,r){return q*r*12}
+
+let extC=calc(ext,20)
+let modC=calc(mod,20)
+let smokeC=calc(smoke,20)
+let mcpC=calc(mcp,15)
+let sirenC=calc(siren,15)
+let lightC=calc(light,30)
+let hoseC=calc(hose,15)
+let sprinklerC=calc(sprinkler,15)
+let panelC=calc(panel,100)
+let hpanelC=calc(hpanel,100)
+
+let subtotal=extC+modC+smokeC+mcpC+sirenC+lightC+hoseC+sprinklerC+panelC+hpanelC
+
+let minimumNote=""
+
+if(subtotal < 5000){
+
+subtotal=5000
+
+minimumNote="<br><br><b>Minimum AMC charge ₹5000 applicable</b>"
+
+}
+
+let gst=Math.round(subtotal*0.18)
+
+let grandTotal=subtotal+gst
+
+let monthly=Math.round(grandTotal/12)
+
+let date=new Date().toLocaleDateString()
+
+let html=""
+
+html+="<div class='letter'>"
+
+html+="<img src='https://i.ibb.co/hRscn593/file-00000000e4a471fa8e7aaff8a90f2e34.png' class='logo'>"
+
+html+="<h2>MADAN SAFETY SHIELD</h2>"
+html+="Fire Safety Equipment Supplier<br>"
+html+="Mobile : 8015828265<br>"
+html+="Email : madansafetyshield@gmail.com<br><hr>"
+
+html+="Quotation No : MSS-"+Math.floor(Math.random()*1000)+"<br>"
+html+="Date : "+date+"<br><br>"
+
+html+="Client : "+client+"<br>"
+html+="Company : "+company+"<br>"
+html+="Mobile : "+mobile+"<br><br>"
+
+html+="<table>"
+html+="<tr><th>Equipment</th><th>Qty</th><th>Rate</th><th>Total</th></tr>"
+
+html+="<tr><td>Fire Extinguisher</td><td>"+ext+"</td><td>20</td><td>"+extC+"</td></tr>"
+html+="<tr><td>Modular Extinguisher</td><td>"+mod+"</td><td>20</td><td>"+modC+"</td></tr>"
+html+="<tr><td>Smoke Detector</td><td>"+smoke+"</td><td>20</td><td>"+smokeC+"</td></tr>"
+html+="<tr><td>MCP</td><td>"+mcp+"</td><td>15</td><td>"+mcpC+"</td></tr>"
+html+="<tr><td>Siren</td><td>"+siren+"</td><td>15</td><td>"+sirenC+"</td></tr>"
+html+="<tr><td>Emergency Light</td><td>"+light+"</td><td>30</td><td>"+lightC+"</td></tr>"
+html+="<tr><td>Hose Reel Drum</td><td>"+hose+"</td><td>15</td><td>"+hoseC+"</td></tr>"
+html+="<tr><td>Sprinkler</td><td>"+sprinkler+"</td><td>15</td><td>"+sprinklerC+"</td></tr>"
+html+="<tr><td>Fire Alarm Panel</td><td>"+panel+"</td><td>100</td><td>"+panelC+"</td></tr>"
+html+="<tr><td>Hydrant Panel</td><td>"+hpanel+"</td><td>100</td><td>"+hpanelC+"</td></tr>"
+html+="</table>"
+
+html+="<br>Sub Total : ₹"+subtotal
+html+="<br>GST (18%) : ₹"+gst
+html+="<br><b>Grand Total : ₹"+grandTotal+"</b>"
+html+="<br><b>AMC Monthly : ₹"+monthly+"</b>"
+
+html+=minimumNote
+
+html+="<br><br><h3>AMC Benefits</h3>"
+html+="✔ 2 months once site inspection<br>"
+html+="✔ Inspection log register entry<br>"
+html+="✔ 5 Fire Extinguishers free refilling<br>"
+html+="✔ Free delivery"
+
+html+="<br><br><h3>Bank Details</h3>"
+html+="Account Name : ARAVINTH<br>"
+html+="Bank : State Bank Of India<br>"
+html+="Account No : 32542422203<br>"
+html+="IFSC : SBIN0000935<br>"
+html+="Branch : Tiruppur"
+
+html+="<br><br>Authorized Signature<br>Madan Safety Shield"
+
+html+="</div>"
+
+html+="<br><button onclick='window.print()'>Print Quotation</button>"
+
+let msg="AMC QUOTATION%0AClient:"+client+"%0ACompany:"+company+"%0AGrand Total:"+grandTotal
+
+html+="<br><br><a class='whatsapp' href='https://wa.me/918015828265?text="+msg+"' target='_blank'>Send via WhatsApp</a>"
+
+document.getElementById("report").innerHTML=html
+
+}
+
+</script></body>
+</html>

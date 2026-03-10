@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Book Fire Safety Service | Madan Safety Shield</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+/* BODY */
+
+body{
+margin:0;
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+/* BACK BUTTON */
+
+.back-btn{
+
+position:fixed;
+top:10px;
+left:10px;
+
+background:black;
+color:red;
+
+padding:6px 10px;
+font-size:20px;
+font-weight:bold;
+
+text-decoration:none;
+
+border:2px solid red;
+border-radius:8px;
+
+z-index:999;
+
+text-shadow:
+0 0 10px red,
+0 0 20px red,
+0 0 30px orange;
+
+box-shadow:
+0 0 10px red,
+0 0 20px red;
+
+transition:0.3s;
+
+}
+
+.back-btn:hover{
+
+background:red;
+color:white;
+
+}
+
+/* CONTAINER */
+
+.container{
+
+width:95%;
+max-width:600px;
+
+background:#111;
+
+padding:35px;
+
+border-radius:10px;
+
+box-shadow:0 0 20px rgba(0,0,0,0.6);
+
+}
+
+/* TITLE */
+
+h1{
+
+text-align:center;
+margin-bottom:30px;
+
+}
+
+/* INPUT */
+
+input,select,textarea{
+
+width:100%;
+
+padding:12px;
+
+margin-top:10px;
+margin-bottom:15px;
+
+border:none;
+
+border-radius:5px;
+
+background:#1c1c1c;
+
+color:white;
+
+font-size:15px;
+
+}
+
+/* TEXTAREA */
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+/* SERVICE INFO */
+
+.service-info{
+
+background:#1a1a1a;
+
+padding:15px;
+
+border-radius:6px;
+
+margin-bottom:15px;
+
+line-height:1.6;
+
+font-size:14px;
+
+}
+
+/* LABEL */
+
+label{
+
+font-size:14px;
+
+display:block;
+
+margin-top:10px;
+
+}
+
+/* BUTTON */
+
+button{
+
+width:100%;
+
+background:red;
+
+border:none;
+
+color:white;
+
+padding:14px;
+
+font-size:16px;
+
+cursor:pointer;
+
+border-radius:6px;
+
+margin-top:10px;
+
+transition:0.3s;
+
+}
+
+button:hover{
+
+background:#ff1a1a;
+
+}
+
+/* ADMIN BUTTON */
+
+.admin-btn{
+
+background:#333;
+
+}
+
+.admin-btn:hover{
+
+background:#555;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="back-btn">⬅ BACK</a>
+
+<div class="container">
+
+<h1>Book Fire Safety Service</h1>
+
+<input id="name" placeholder="Your Name">
+
+<input id="company" placeholder="Company Name">
+
+<input id="phone" placeholder="Mobile Number">
+
+<input id="location" placeholder="Location / City">
+
+<select id="service" onchange="showServiceInfo()">
+
+<option value="">Select Service Required</option>
+
+<option value="survey">Site Survey</option>
+<option value="refill">Fire Extinguisher Refilling</option>
+<option value="install">Fire Safety Installation</option>
+<option value="hydrant">Hydrant System Enquiry</option>
+<option value="alarm">Fire Alarm Installation</option>
+<option value="supply">Fire Extinguisher Supply</option>
+<option value="audit">Fire Safety Audit</option>
+<option value="legal">Legal Fire Certification</option>
+<option value="maintenance">Annual Maintenance</option>
+<option value="emergency">Emergency Fire Service</option>
+
+</select>
+
+<div id="serviceInfo" class="service-info">
+
+Select service to see details.
+
+</div>
+
+<label>Select Inspection Date</label>
+
+<input type="date" id="date">
+
+<label>Select Time</label>
+
+<input type="time" id="time">
+
+<textarea id="details" placeholder="Additional Details"></textarea>
+
+<button onclick="sendAudit()">Book Service</button>
+
+<br>
+
+<a href="admin-login.html">
+
+<button class="admin-btn">Admin</button>
+
+</a>
+
+</div>
+
+<script>
+
+/* SERVICE DESCRIPTION */
+
+function showServiceInfo(){
+
+let service=document.getElementById("service").value;
+
+let text="";
+
+if(service=="survey")
+text="Our engineer will visit your building, inspect fire safety systems, identify risks and recommend required fire protection equipment.";
+
+if(service=="refill")
+text="We provide fire extinguisher refilling, pressure testing, replacement of spare parts and certification as per IS standards.";
+
+if(service=="install")
+text="Complete installation of fire extinguishers, fire alarm systems, hydrant systems and emergency lighting.";
+
+if(service=="hydrant")
+text="Hydrant system consultation, design, pump capacity calculation and complete hydrant installation.";
+
+if(service=="alarm")
+text="Installation of smoke detectors, MCP, hooters and fire alarm control panels.";
+
+if(service=="supply")
+text="Supply of fire extinguishers, fire alarm systems, hydrant accessories and safety equipment.";
+
+if(service=="audit")
+text="Complete fire safety audit, risk assessment and safety compliance verification.";
+
+if(service=="legal")
+text="Fire safety documentation and assistance for legal fire NOC certification.";
+
+if(service=="maintenance")
+text="Annual maintenance contract for fire safety systems including inspection and servicing.";
+
+if(service=="emergency")
+text="Emergency fire safety service for urgent system repair or inspection.";
+
+document.getElementById("serviceInfo").innerHTML=text;
+
+}
+
+
+/* WHATSAPP BOOKING */
+
+function sendAudit(){
+
+let name=document.getElementById("name").value;
+let company=document.getElementById("company").value;
+let phone=document.getElementById("phone").value;
+let location=document.getElementById("location").value;
+let service=document.getElementById("service").value;
+let date=document.getElementById("date").value;
+let time=document.getElementById("time").value;
+let details=document.getElementById("details").value;
+
+let message=
+
+"🔥 FIRE SAFETY SERVICE BOOKING\n\n"+
+
+"Service : "+service+"\n"+
+"Name : "+name+"\n"+
+"Company : "+company+"\n"+
+"Phone : "+phone+"\n"+
+"Location : "+location+"\n\n"+
+
+"Preferred Date : "+date+"\n"+
+"Preferred Time : "+time+"\n\n"+
+
+"Details : "+details;
+
+let whatsapp="https://wa.me/918015828265?text="+encodeURIComponent(message);
+
+window.open(whatsapp,"_blank");
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="theme.css">
+
+<title>AI Fire Safety Advisor | Madan Safety Shield</title>
+
+<style>
+
+/* BACK BUTTON */
+
+.back-btn{
+
+position:fixed;
+top:10px;
+left:10px;
+
+background:black;
+color:red;
+
+padding:6px 10px;
+
+font-size:20px;
+font-weight:bold;
+
+text-decoration:none;
+
+border:2px solid red;
+border-radius:8px;
+
+z-index:999;
+
+}
+
+/* PAGE STYLE */
+
+body{
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+margin:0;
+padding:40px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:#1a1a1a;
+padding:30px;
+border-radius:8px;
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:4px;
+border:none;
+box-sizing:border-box;
+}
+
+.suggestions{
+background:#111;
+margin-top:5px;
+border-radius:5px;
+}
+
+.suggestions div{
+padding:10px;
+cursor:pointer;
+border-bottom:1px solid #333;
+}
+
+.suggestions div:hover{
+background:#222;
+}
+
+.answer{
+margin-top:20px;
+background:#111;
+padding:20px;
+border-radius:6px;
+min-height:50px;
+border-left:4px solid #ff4d4d;
+}
+
+h1{
+color:#ff4d4d;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="back-btn">⬅ BACK</a>
+
+<div class="container">
+
+<h1>AI Fire Safety Advisor</h1>
+
+<p>Type your fire safety question below to get instant expert advice.</p>
+
+<input type="text" id="search" placeholder="Type your fire safety question (e.g., fire extinguisher, smoke detector)...">
+
+<div id="suggestions" class="suggestions"></div>
+
+<div id="answer" class="answer">
+The answer will appear here...
+</div>
+
+</div>
+
+<script>
+const database=[   
+    {q:"fire extinguisher requirement",a:"Normally one fire extinguisher per 3000 sq ft depending on hazard classification."},   
+    {q:"abc fire extinguisher",a:"ABC extinguisher can control Class A B and C fires."},   
+    {q:"smoke detector spacing",a:"Smoke detectors normally cover around 500 sq ft depending on ceiling height."},   
+    {q:"fire alarm system",a:"Fire alarm system includes smoke detectors manual call points hooters and fire panel."},   
+    {q:"fire hydrant system",a:"Hydrant system includes fire pump landing valves hose reels and fire water tank."},   
+    {q:"fire pump system",a:"Fire pump system includes electric pump diesel pump and jockey pump."},   
+    {q:"landing valve",a:"Landing valve is hydrant outlet installed on each floor."},   
+    {q:"emergency exit requirement",a:"Emergency exits must be clearly marked and unobstructed."},   
+    {q:"fire drill frequency",a:"Fire drills should normally be conducted once every 6 months."},   
+    {q:"fire safety training",a:"Fire safety training includes extinguisher usage evacuation and emergency response."},   
+    {q:"fire safety audit",a:"Fire audit checks alarms hydrants extinguishers exits and training."},   
+    {q:"sedex audit fire safety",a:"SEDEX audits evaluate labour standards and health safety compliance."},   
+    {q:"smeta audit",a:"SMETA audits verify labour health safety environment and ethics."},   
+    {q:"ctpat audit",a:"CTPAT focuses on supply chain security and safety."},   
+    {q:"disney fama audit",a:"Disney compliance requires fire alarms extinguishers exits and fire drills."},   
+    {q:"warehouse fire safety",a:"Warehouse safety includes hydrant system alarms and fire extinguishers."},   
+    {q:"factory fire safety",a:"Factories require fire alarm hydrant system exits and training."},  
+    {q:"what is fire extinguisher",a:"Fire extinguisher is a portable device used to control small fires."},   
+    {q:"what is abc fire extinguisher",a:"ABC extinguisher can control Class A B and C fires."},   
+    {q:"how many fire extinguishers required",a:"Normally one fire extinguisher per 3000 sq ft depending on hazard classification."},   
+    {q:"where should fire extinguisher be installed",a:"Extinguishers should be installed near exits corridors and high risk areas."},   
+    {q:"how to use fire extinguisher",a:"Use PASS method Pull Aim Squeeze Sweep."},   
+    {q:"what is smoke detector",a:"Smoke detector senses smoke and activates alarm."},   
+    {q:"smoke detector spacing",a:"Smoke detectors normally cover around 500 sq ft depending on ceiling height."},   
+    {q:"what is heat detector",a:"Heat detector senses temperature increase."},   
+    {q:"what is fire alarm system",a:"Fire alarm system detects fire and alerts occupants."},   
+    {q:"what is manual call point",a:"Manual call point allows occupants to trigger alarm manually."},   
+    {q:"what is fire hooter",a:"Fire hooter is audible alarm used during fire emergency."},   
+    {q:"what is fire alarm panel",a:"Fire alarm panel is central control unit of alarm system."},   
+    {q:"what is fire hydrant system",a:"Hydrant system supplies water for firefighting."},   
+    {q:"what is fire pump",a:"Fire pump maintains water pressure in hydrant system."},   
+    {q:"what is jockey pump",a:"Jockey pump maintains pressure in hydrant pipeline."},   
+    {q:"what is diesel fire pump",a:"Diesel pump works during power failure."},   
+    {q:"what is landing valve",a:"Landing valve is hydrant outlet installed on each floor."},   
+    {q:"what is hose reel",a:"Hose reel allows quick firefighting using water."},   
+    {q:"what is hose pipe",a:"Flexible pipe used to deliver water during firefighting."},   
+    {q:"what is fire water tank",a:"Tank storing water for firefighting systems."},   
+    {q:"what is emergency exit",a:"Emergency exit is route used for evacuation during fire."},   
+    {q:"what is emergency light",a:"Emergency light works during power failure."},   
+    {q:"what is fire drill",a:"Fire drill is evacuation practice during emergency."},   
+    {q:"how often fire drill required",a:"Fire drill normally conducted every 6 months."},   
+    {q:"what is fire safety training",a:"Training for workers to respond during fire emergency."},   
+    {q:"what is fire safety audit",a:"Inspection of fire safety equipment and compliance."},   
+    {q:"what is fire risk assessment",a:"Evaluation of fire hazards in workplace."},   
+    {q:"what is fire hazard",a:"Condition that increases risk of fire."},   
+    {q:"what is fire triangle",a:"Heat fuel and oxygen required for fire."},   
+    {q:"what is fire load",a:"Amount of combustible materials present."},   
+    {q:"what is evacuation plan",a:"Plan for safe exit during emergency."},   
+    {q:"what is assembly point",a:"Safe gathering place after evacuation."},   
+    {q:"what is fire prevention",a:"Actions taken to avoid fire incidents."},   
+    {q:"what is fire protection system",a:"Systems used to control and extinguish fires."},   
+    {q:"what is sprinkler system",a:"Automatic water spray system used to control fire."},   
+    {q:"what is gas suppression system",a:"Fire suppression using gas agents."},   
+    {q:"what is fire door",a:"Door designed to resist fire spread."},   
+    {q:"what is fire compartment",a:"Building section that prevents fire spread."},   
+    {q:"what is factory fire safety",a:"Fire protection measures used in industrial workplaces."},   
+    {q:"what is warehouse fire safety",a:"Safety systems used to prevent warehouse fires."},   
+    {q:"what is safety inspection",a:"Regular checking of workplace hazards."},   
+    {q:"what is safety audit",a:"Systematic evaluation of safety systems."},   
+    {q:"what is incident report",a:"Document describing accident or fire event."},   
+    {q:"what is near miss",a:"Incident that nearly caused accident."},   
+    {q:"what is hazard identification",a:"Process of identifying workplace hazards."},   
+    {q:"what is risk control",a:"Measures taken to reduce hazards."},   
+    {q:"what is safety officer",a:"Person responsible for workplace safety."},   
+    {q:"what is safety committee",a:"Group responsible for safety management."},   
+    {q:"what is hot work permit",a:"Permit required for welding cutting work."},   
+    {q:"what is confined space",a:"Restricted area with limited access."},   
+    {q:"what is emergency response plan",a:"Plan for handling emergencies."},   
+    {q:"what is sedex audit",a:"SEDEX audit evaluates labour and safety compliance."},   
+    {q:"what is smeta audit",a:"SMETA is ethical trade audit used globally."},   
+    {q:"what is smeta 2 pillar",a:"Audit covering labour and health safety."},   
+    {q:"what is smeta 4 pillar",a:"Audit covering labour safety environment and ethics."},   
+    {q:"what is ctpat audit",a:"Supply chain security audit."},   
+    {q:"what is disney fama audit",a:"Compliance audit required for Disney suppliers."},   
+    {q:"what is audit checklist",a:"List of items inspected during audit."},   
+    {q:"what is corrective action",a:"Steps taken to fix audit findings."},   
+    {q:"what is non compliance",a:"Violation of audit requirement."},   
+    {q:"what is audit report",a:"Document summarizing audit findings."},   
+    {q:"what is audit preparation",a:"Steps taken before audit."},   
+    {q:"what is safety documentation",a:"Records related to safety compliance."},   
+    {q:"what is inspection log",a:"Record of safety inspections."},   
+    {q:"what is maintenance record",a:"Record of equipment maintenance."},   
+    {q:"what is first aid",a:"Immediate medical assistance during injury."},   
+    {q:"what is cpr",a:"Cardiopulmonary resuscitation used during cardiac arrest."},   
+    {q:"what is burn treatment",a:"First aid treatment for burn injuries."},   
+    {q:"what is smoke inhalation",a:"Breathing smoke during fire."},   
+    {q:"what is emergency communication",a:"System used to inform people during emergency."},   
+    {q:"what is rescue procedure",a:"Process to save people during emergency."},   
+    {q:"what is disaster management",a:"Planning for large scale emergencies."},   
+    {q:"what is emergency preparedness",a:"Readiness to respond to emergencies."},   
+    {q:"what is safety awareness",a:"Knowledge about workplace hazards."},   
+    {q:"what is industrial safety",a:"Safety practices in industrial environment."},   
+    {q:"what is workplace safety",a:"Measures to protect workers."},   
+    {q:"what is accident prevention",a:"Actions taken to avoid accidents."},   
+    {q:"what is risk management",a:"Process of controlling workplace risks."},   
+    {q:"what is safety culture",a:"Company attitude towards safety."},   
+    {q:"what is muster point",a:"Safe gathering location during emergency."},   
+    {q:"what is fire extinguisher inspection",a:"Inspection ensures extinguisher is present accessible and fully charged."},   
+    {q:"how often extinguisher inspection required",a:"Extinguisher inspection should normally be done monthly."},   
+    {q:"how often extinguisher servicing required",a:"Extinguishers usually require servicing once every year."},   
+    {q:"what is extinguisher hydro test",a:"Hydrostatic test checks cylinder strength using high pressure water."},   
+    {q:"what is extinguisher pressure gauge",a:"Gauge indicates internal pressure of extinguisher."},   
+    {q:"what is extinguisher safety pin",a:"Safety pin prevents accidental discharge."},   
+    {q:"what is extinguisher nozzle",a:"Nozzle directs extinguishing agent toward fire."},   
+    {q:"what is extinguisher hose",a:"Flexible hose used to discharge extinguishing agent."},   
+    {q:"what is extinguisher bracket",a:"Bracket holds extinguisher securely on wall."},   
+    {q:"what is extinguisher cabinet",a:"Cabinet protects extinguisher and improves visibility."},   
+    {q:"what is extinguisher signage",a:"Sign used to indicate extinguisher location."},   
+    {q:"what is extinguisher discharge time",a:"Time required to empty extinguisher contents."},   
+    {q:"what is extinguisher discharge range",a:"Distance extinguishing agent can reach."},   
+    {q:"what is extinguisher classification",a:"Extinguishers classified by type of fire they control."},   
+    {q:"what is class a fire",a:"Fire involving wood paper cloth or solid materials."},   
+    {q:"what is class b fire",a:"Fire involving flammable liquids like petrol or diesel."},   
+    {q:"what is class c fire",a:"Fire involving electrical equipment."},   
+    {q:"what is class d fire",a:"Fire involving combustible metals."},   
+    {q:"what is electrical fire",a:"Fire caused by electrical equipment or wiring."},   
+    {q:"what is foam fire extinguisher",a:"Extinguisher used mainly for flammable liquid fires."},   
+    {q:"what is co2 fire extinguisher",a:"Extinguisher used for electrical fires."},   
+    {q:"what is water fire extinguisher",a:"Extinguisher used for Class A fires."},   
+    {q:"what is dry powder extinguisher",a:"Extinguisher suitable for multiple fire classes."},   
+    {q:"what is fire detection system",a:"System used to detect fire early."},   
+    {q:"what is addressable fire alarm system",a:"Alarm system that identifies exact device location."},   
+    {q:"what is conventional fire alarm system",a:"Alarm system dividing building into zones."},   
+    {q:"what is fire alarm zone",a:"Area monitored by specific alarm circuit."},   
+    {q:"what is fire alarm detector",a:"Device that detects smoke heat or flame."},   
+    {q:"what is beam detector",a:"Detector used for large spaces like warehouses."},   
+    {q:"what is flame detector",a:"Detector that senses flame radiation."},   
+    {q:"what is alarm annunciator",a:"Panel that displays alarm status."},   
+    {q:"what is fire alarm battery backup",a:"Battery that powers alarm during outage."},   
+    {q:"what is fire alarm testing",a:"Inspection to verify alarm functionality."},   
+    {q:"what is fire alarm maintenance",a:"Regular servicing of alarm components."},   
+    {q:"what is fire alarm cable",a:"Cable used to connect alarm devices."},   
+    {q:"what is fire alarm loop",a:"Circuit connecting addressable devices."},   
+    {q:"what is fire alarm sounder",a:"Device producing alarm sound."},   
+    {q:"what is fire alarm strobe",a:"Visual alarm light used with hooter."},   
+    {q:"what is emergency evacuation",a:"Process of leaving building safely during emergency."},   
+    {q:"what is evacuation route",a:"Path used to exit building during emergency."},   
+    {q:"what is evacuation map",a:"Map showing exit routes and assembly points."},   
+    {q:"what is emergency assembly point",a:"Safe location outside building for gathering."},   
+    {q:"what is evacuation drill",a:"Practice exercise to test evacuation plan."},   
+    {q:"what is fire warden",a:"Person responsible for evacuation control."},   
+    {q:"what is emergency control room",a:"Room used to coordinate emergency response."},   
+    {q:"what is incident command system",a:"Structure used to manage emergencies."},   
+    {q:"what is fire brigade connection",a:"External connection for firefighters."},   
+    {q:"what is fire department inlet",a:"Connection used by fire service to supply water."},   
+    {q:"what is sprinkler head",a:"Device that sprays water automatically."},   
+    {q:"what is sprinkler piping",a:"Pipeline network supplying water to sprinklers."},   
+    {q:"what is sprinkler pump",a:"Pump supplying water to sprinkler system."},   
+    {q:"what is sprinkler alarm valve",a:"Valve used to control sprinkler flow."},   
+    {q:"what is deluge system",a:"System releasing large amount of water quickly."},   
+    {q:"what is foam suppression system",a:"System using foam to control liquid fires."},   
+    {q:"what is gas suppression system",a:"System using gas agents to suppress fire."},   
+    {q:"what is clean agent system",a:"Fire suppression system using non damaging gases."},   
+    {q:"what is fire safety compliance",a:"Meeting fire safety regulations and standards."},   
+    {q:"what is building fire code",a:"Regulations governing fire safety design."},   
+    {q:"what is national building code fire rules",a:"Guidelines for fire safety in buildings."},   
+    {q:"what is fire safety permit",a:"Authorization required for certain activities."},   
+    {q:"what is safety inspection checklist",a:"List used to check safety compliance."},   
+    {q:"what is hazard control hierarchy",a:"Method to eliminate or reduce hazards."},   
+    {q:"what is engineering control",a:"Physical change used to reduce risk."},   
+    {q:"what is administrative control",a:"Procedures used to reduce hazards."},   
+    {q:"what is safety signage requirement",a:"Signs required to warn or guide workers."},   
+    {q:"what is personal protective equipment",a:"Equipment worn to protect workers."},   
+    {q:"what is safety helmet",a:"Head protection device."},   
+    {q:"what is safety gloves",a:"Hand protection equipment."},   
+    {q:"what is safety goggles",a:"Eye protection equipment."},   
+    {q:"what is fire resistant clothing",a:"Clothing designed to resist fire exposure."},   
+    {q:"what is workplace emergency plan",a:"Plan describing response to emergencies."},   
+    {q:"what is safety risk matrix",a:"Tool used to evaluate risk severity."},   
+    {q:"what is safety training record",a:"Document showing employee training history."},   
+    {q:"what is inspection checklist record",a:"Document showing inspection results."},   
+    {q:"what is equipment maintenance log",a:"Record of equipment servicing."},   
+    {q:"what is safety compliance certificate",a:"Certificate showing safety compliance."},   
+    {q:"what is fire safety certificate",a:"Approval from fire authority."},   
+    {q:"what is building occupancy classification",a:"Category of building use."},   
+    {q:"what is industrial hazard classification",a:"Classification based on industrial risks."},   
+    {q:"what is flammable liquid storage",a:"Storage of liquids that can ignite easily."},   
+    {q:"what is combustible dust hazard",a:"Dust that can cause explosion."},   
+    {q:"what is explosion prevention",a:"Measures taken to prevent explosions."},   
+    {q:"what is explosion venting",a:"System that releases pressure safely."},   
+    {q:"what is fire resistant material",a:"Material that slows fire spread."},   
+    {q:"what is fire rated wall",a:"Wall designed to resist fire for certain time."},   
+    {q:"what is fire rated door",a:"Door designed to prevent fire spread."},   
+    {q:"what is fire resistant glass",a:"Glass designed to resist heat and flames."},   
+    {q:"what is fire stopping system",a:"System sealing gaps to prevent fire spread."},   
+    {q:"what is passive fire protection",a:"Structural fire protection measures."},   
+    {q:"what is active fire protection",a:"Systems that actively fight fire."},   
+    {q:"what is fire safety engineering",a:"Engineering discipline focusing on fire protection."},   
+    {q:"what is industrial fire safety",a:"Industrial fire safety includes systems and procedures to prevent fires in factories."},   
+    {q:"what is warehouse safety system",a:"Warehouse safety includes fire alarms hydrants extinguishers and emergency exits."},   
+    {q:"what is safety risk assessment",a:"Risk assessment identifies hazards and evaluates their risk level."},   
+    {q:"what is safety management system",a:"Safety management system organizes safety policies procedures and controls."},   
+    {q:"what is workplace hazard",a:"Workplace hazard is anything that can cause injury or damage."},   
+    {q:"what is fire hazard identification",a:"Process of identifying potential fire sources."},   
+    {q:"what is combustible storage rule",a:"Combustible materials must be stored safely away from ignition sources."},   
+    {q:"what is flammable liquid safety",a:"Flammable liquids must be stored in approved containers."},   
+    {q:"what is fire prevention plan",a:"Plan to reduce fire risk in workplace."},   
+    {q:"what is fire protection design",a:"Designing systems to detect and control fires."},   
+    {q:"what is safety compliance inspection",a:"Inspection verifying compliance with safety regulations."},   
+    {q:"what is emergency evacuation procedure",a:"Procedure guiding people to exit building safely."},   
+    {q:"what is emergency evacuation signal",a:"Alarm signal indicating evacuation."},   
+    {q:"what is building fire safety plan",a:"Plan describing fire protection measures in building."},   
+    {q:"what is fire safety responsibility",a:"Duty of employees and management to maintain fire safety."},   
+    {q:"what is fire safety officer duty",a:"Fire safety officer supervises fire protection measures."},   
+    {q:"what is safety training program",a:"Program designed to educate workers about safety."},   
+    {q:"what is workplace emergency drill",a:"Practice exercise to test emergency readiness."},   
+    {q:"what is fire drill checklist",a:"Checklist used to evaluate fire drill effectiveness."},   
+    {q:"what is fire emergency communication",a:"System used to communicate during emergencies."},   
+    {q:"what is fire alarm monitoring",a:"Continuous monitoring of alarm systems."},   
+    {q:"what is fire alarm supervision",a:"Ensuring alarm system is functioning properly."},   
+    {q:"what is fire alarm troubleshooting",a:"Process of identifying and fixing alarm faults."},   
+    {q:"what is safety equipment inspection",a:"Inspection verifying condition of safety equipment."},   
+    {q:"what is safety equipment maintenance",a:"Regular servicing of safety equipment."},   
+    {q:"what is hydrant system inspection",a:"Inspection verifying hydrant system functionality."},   
+    {q:"what is hydrant system testing",a:"Testing hydrant water pressure and flow."},   
+    {q:"what is hydrant system maintenance",a:"Routine servicing of hydrant components."},   
+    {q:"what is fire pump inspection",a:"Inspection verifying pump condition."},   
+    {q:"what is fire pump testing",a:"Testing pump performance."},   
+    {q:"what is fire pump maintenance",a:"Servicing pump components regularly."},   
+    {q:"what is fire safety awareness training",a:"Training program to improve safety knowledge."},   
+    {q:"what is hazard communication",a:"Communication of workplace hazards to employees."},   
+    {q:"what is emergency preparedness training",a:"Training workers to respond during emergencies."},   
+    {q:"what is workplace safety orientation",a:"Initial safety training for new employees."},   
+    {q:"what is safety toolbox talk",a:"Short safety discussion conducted at workplace."},   
+    {q:"what is safety incident investigation",a:"Investigation to determine cause of incident."},   
+    {q:"what is accident root cause analysis",a:"Analysis to identify underlying causes of accident."},   
+    {q:"what is fire emergency team",a:"Team responsible for firefighting response."},   
+    {q:"what is evacuation warden",a:"Person responsible for guiding evacuation."},   
+    {q:"what is safety compliance monitoring",a:"Monitoring workplace compliance with safety rules."},   
+    {q:"what is safety audit checklist",a:"Checklist used during safety audit."},   
+    {q:"what is fire safety documentation",a:"Records related to fire safety systems."},   
+    {q:"what is safety performance indicator",a:"Metric used to evaluate safety performance."},   
+    {q:"what is safety improvement plan",a:"Plan to improve workplace safety."},   
+    {q:"what is fire safety inspection report",a:"Document summarizing inspection findings."},   
+    {q:"what is fire safety compliance report",a:"Report confirming compliance with fire regulations."},   
+    {q:"what is safety hazard report",a:"Report describing identified hazard."},   
+    {q:"what is near miss reporting system",a:"System used to report near miss incidents."},   
+    {q:"what is safety observation program",a:"Program encouraging reporting of unsafe conditions."},   
+    {q:"what is behavioural safety program",a:"Program improving worker safety behaviour."},   
+    {q:"what is industrial emergency response plan",a:"Plan describing response to industrial emergencies."},   
+    {q:"what is fire protection engineering",a:"Engineering discipline focused on fire protection."},   
+    {q:"what is fire modelling",a:"Simulation used to predict fire behavior."},   
+    {q:"what is smoke control system",a:"System used to remove smoke during fire."},   
+    {q:"what is smoke ventilation system",a:"System used to exhaust smoke."},   
+    {q:"what is pressurization system",a:"System maintaining positive pressure in escape routes."},   
+    {q:"what is stairwell pressurization",a:"Pressurization to prevent smoke entering stairs."},   
+    {q:"what is fire rated corridor",a:"Corridor designed to resist fire spread."},   
+    {q:"what is fire resistant insulation",a:"Insulation designed to resist high temperature."},   
+    {q:"what is fire detection sensitivity",a:"Sensitivity level of detection device."},   
+    {q:"what is fire alarm response time",a:"Time required for alarm activation."},   
+    {q:"what is fire evacuation time",a:"Time required for occupants to evacuate."},   
+    {q:"what is fire load calculation",a:"Calculation estimating combustible load."},   
+    {q:"what is fire risk analysis",a:"Detailed analysis of fire hazards."},   
+    {q:"what is fire hazard control",a:"Measures taken to control hazards."},   
+    {q:"what is safety compliance training",a:"Training about regulatory safety requirements."},   
+    {q:"what is safety permit system",a:"Permit system controlling hazardous work."},   
+    {q:"what is safety emergency contact list",a:"List of emergency contacts."},   
+    {q:"what is safety alarm monitoring center",a:"Location where alarms are monitored."},   
+    {q:"what is safety evacuation signage",a:"Signs guiding evacuation routes."},   
+    {q:"what is safety emergency exit sign",a:"Illuminated sign showing exit path."},   
+    {q:"what is fire alarm integration",a:"Integration of fire alarm with other systems."},   
+    {q:"what is building fire monitoring system",a:"System monitoring building fire safety."},   
+    {q:"what is fire alarm control room",a:"Room where fire alarm panel installed."},   
+    {q:"what is fire safety compliance training",a:"Training about fire safety regulations."},   
+    {q:"what is safety culture development",a:"Process of improving workplace safety culture."},   
+    {q:"what is workplace safety leadership",a:"Leadership promoting safety practices."},   
+    {q:"what is safety risk mitigation",a:"Reducing risks through safety measures."},   
+    {q:"what is emergency rescue procedure",a:"Procedure to rescue people during emergencies."},   
+    {q:"what is fire suppression strategy",a:"Strategy used to control fires effectively."},   
+    {q:"what is fire safety compliance audit",a:"Audit verifying fire protection systems follow regulations."},   
+    {q:"what is industrial fire protection system",a:"System designed to detect control and extinguish industrial fires."},   
+    {q:"what is fire safety regulation",a:"Legal rule governing fire safety practices."},   
+    {q:"what is fire safety certification",a:"Certificate proving compliance with fire regulations."},   
+    {q:"what is fire department approval",a:"Approval issued by fire authority after inspection."},   
+    {q:"what is building fire compliance",a:"Meeting fire safety requirements for building occupancy."},   
+    {q:"what is fire evacuation alarm",a:"Alarm indicating immediate evacuation."},   
+    {q:"what is safety emergency procedure",a:"Procedure followed during emergencies."},   
+    {q:"what is industrial hazard control",a:"Measures used to reduce industrial hazards."},   
+    {q:"what is fire safety inspection checklist",a:"Checklist used during fire safety inspections."},   
+    {q:"what is emergency evacuation route sign",a:"Sign indicating evacuation direction."},   
+    {q:"what is fire protection maintenance",a:"Routine servicing of fire systems."},   
+    {q:"what is fire protection inspection",a:"Inspection verifying fire equipment condition."},   
+    {q:"what is fire safety improvement plan",a:"Plan to improve fire safety systems."},   
+    {q:"what is workplace fire protection policy",a:"Company policy governing fire safety."},   
+    {q:"what is fire safety risk control",a:"Actions taken to reduce fire risk."},   
+    {q:"what is fire prevention inspection",a:"Inspection to identify fire hazards."},   
+    {q:"what is fire emergency command system",a:"System used to manage fire emergencies."},   
+    {q:"what is fire safety awareness campaign",a:"Program promoting fire safety knowledge."},   
+    {q:"what is building fire risk analysis",a:"Analysis identifying building fire risks."},   
+    {q:"what is fire safety training program",a:"Program designed to train employees about fire hazards."},   
+    {q:"what is safety emergency drill record",a:"Document recording emergency drill results."},   
+    {q:"what is fire safety equipment inventory",a:"List of all fire safety equipment."},   
+    {q:"what is fire extinguisher inspection tag",a:"Tag indicating last inspection date."},   
+    {q:"what is hydrant system pressure test",a:"Test verifying hydrant pressure."},   
+    {q:"what is fire pump performance test",a:"Test verifying pump capacity."},   
+    {q:"what is fire alarm sensitivity test",a:"Test verifying detector response."},   
+    {q:"what is fire alarm maintenance log",a:"Record of alarm servicing."},   
+    {q:"what is hydrant system inspection log",a:"Record of hydrant inspections."},   
+    {q:"what is fire safety compliance monitoring",a:"Monitoring workplace compliance."},   
+    {q:"what is fire safety improvement recommendation",a:"Suggestion to improve fire safety."},   
+    {q:"what is fire hazard reporting system",a:"System used to report hazards."},   
+    {q:"what is fire emergency notification system",a:"System used to notify occupants."},   
+    {q:"what is fire evacuation training",a:"Training workers to evacuate safely."},   
+    {q:"what is fire suppression system inspection",a:"Inspection of suppression systems."},   
+    {q:"what is fire detection system inspection",a:"Inspection verifying detectors."},   
+    {q:"what is fire alarm evacuation signal",a:"Signal instructing evacuation."},   
+    {q:"what is building fire protection plan",a:"Plan describing building fire systems."},   
+    {q:"what is industrial fire hazard analysis",a:"Analysis identifying industrial fire risks."},   
+    {q:"what is safety compliance verification",a:"Verification of safety compliance."},   
+    {q:"what is emergency response training",a:"Training that prepares employees to respond quickly during emergencies."},   
+    {q:"what is disaster management plan",a:"Plan describing procedures to handle disasters and emergencies."},   
+    {q:"what is emergency rescue team",a:"Group trained to rescue people during emergencies."},   
+    {q:"what is workplace emergency preparedness",a:"Preparation of workplace to respond effectively to emergencies."},   
+    {q:"what is emergency evacuation coordination",a:"Coordination of people during evacuation process."},   
+    {q:"what is emergency communication system",a:"System used to communicate alerts and instructions during emergencies."},   
+    {q:"what is safety awareness training",a:"Training designed to improve awareness about workplace hazards."},   
+    {q:"what is workplace hazard reporting",a:"Process of reporting unsafe conditions in workplace."},   
+    {q:"what is fire hazard prevention program",a:"Program designed to reduce fire risks in workplace."},   
+    {q:"what is fire protection inspection report",a:"Report summarizing inspection of fire protection systems."},   
+    {q:"what is emergency response checklist",a:"Checklist used to ensure emergency readiness."},   
+    {q:"what is first aid emergency kit",a:"Kit containing medical supplies for first aid."},   
+    {q:"what is fire safety awareness program",a:"Program educating workers about fire hazards and prevention."},   
+    {q:"what is workplace evacuation procedure",a:"Procedure describing how workers should evacuate during emergency."},   
+    {q:"what is fire alarm evacuation tone",a:"Specific sound indicating fire evacuation."},   
+    {q:"what is industrial emergency alarm",a:"Alarm system used in factories during emergencies."},   
+    {q:"what is fire prevention maintenance",a:"Maintenance activities preventing fire incidents."},   
+    {q:"what is fire protection inspection schedule",a:"Planned schedule for inspecting fire equipment."},   
+    {q:"what is emergency lighting inspection",a:"Inspection verifying emergency lighting functionality."},   
+    {q:"what is safety emergency evacuation drill",a:"Practice drill simulating emergency evacuation."},   
+    {q:"what is emergency rescue equipment",a:"Equipment used during rescue operations."},   
+    {q:"what is fire emergency command center",a:"Location where emergency operations are managed."},   
+    {q:"what is safety evacuation coordinator",a:"Person responsible for managing evacuation."},   
+    {q:"what is fire hazard reporting form",a:"Form used to report fire hazards."},   
+    {q:"what is emergency medical response team",a:"Team trained to provide medical response during emergencies."},   
+    {q:"what is industrial fire risk mitigation",a:"Process used to reduce industrial fire risks."},   
+    {q:"what is fire protection system monitoring",a:"Continuous monitoring of fire protection systems."},   
+    {q:"what is workplace fire safety orientation",a:"Initial fire safety training given to new employees."},   
+    {q:"what is emergency preparedness evaluation",a:"Assessment of readiness to respond to emergencies."},   
+    {q:"what is emergency evacuation map signage",a:"Signage showing evacuation routes and exits."},   
+    {q:"what is emergency alarm testing",a:"Testing to ensure emergency alarm works properly."},   
+    {q:"what is safety compliance training program",a:"Training program explaining safety regulations."},   
+    {q:"what is fire safety inspection frequency",a:"Frequency at which fire safety inspections are conducted."},   
+    {q:"what is emergency exit route inspection",a:"Inspection verifying emergency exits are clear."},   
+    {q:"what is industrial fire hazard training",a:"Training about fire hazards in industries."},   
+    {q:"what is fire emergency simulation",a:"Simulated scenario used for training emergency response."},   
+    {q:"what is emergency evacuation communication",a:"Communication method used during evacuation."},   
+    {q:"what is workplace fire incident report",a:"Report documenting workplace fire incident."},   
+    {q:"what is fire protection system inspection checklist",a:"Checklist used to inspect fire protection systems."},   
+    {q:"what is industrial safety compliance audit",a:"Audit verifying industrial safety compliance."},   
+    {q:"what is safety hazard communication training",a:"Training about communicating hazards to workers."},   
+    {q:"what is emergency rescue operation plan",a:"Plan for performing rescue operations."},   
+    {q:"what is safety risk control strategy",a:"Strategy used to reduce workplace hazards."},   
+    {q:"what is fire safety emergency briefing",a:"Briefing given before hazardous activities."},   
+    {q:"what is emergency evacuation supervisor",a:"Person supervising evacuation procedures."},   
+    {q:"what is workplace fire emergency protocol",a:"Standard procedure followed during fire emergencies."},   
+    {q:"what is safety compliance monitoring system",a:"System used to monitor safety compliance."},   
+    {q:"what is fire protection inspection program",a:"Program scheduling inspection of fire systems."},   
+    {q:"what is emergency evacuation notification",a:"Notification instructing occupants to evacuate."},   
+    {q:"what is safety emergency response equipment",a:"Equipment used during emergency response."},   
+    {q:"what is fire prevention inspection checklist",a:"Checklist used to inspect fire hazards."},   
+    {q:"what is industrial fire safety awareness",a:"Awareness training about fire hazards in industries."},   
+    {q:"what is emergency preparedness audit",a:"Audit evaluating emergency readiness."},   
+    {q:"what is fire alarm monitoring center",a:"Control center monitoring fire alarm signals."},   
+    {q:"what is safety incident prevention program",a:"Program focused on preventing workplace incidents."},   
+    {q:"what is emergency evacuation command",a:"Command structure used during evacuation."},   
+    {q:"what is fire safety equipment inspection record",a:"Record of fire equipment inspection."},   
+    {q:"what is safety compliance inspection report",a:"Report describing compliance inspection findings."},   
+    {q:"what is emergency rescue coordination",a:"Coordination between rescue teams during emergencies."},   
+    {q:"what is workplace emergency control plan",a:"Plan controlling emergency situations."},   
+    {q:"what is fire emergency risk reduction",a:"Measures used to reduce fire risks."},   
+    {q:"what is fire safety performance evaluation",a:"Evaluation of fire safety effectiveness."},   
+    {q:"what is emergency safety procedure training",a:"Training workers about emergency procedures."},   
+    {q:"what is safety evacuation drill report",a:"Report describing results of evacuation drill."},   
+    {q:"what is emergency preparedness training program",a:"Program teaching emergency preparedness."},   
+    {q:"what is fire safety emergency signage",a:"Signage guiding people during emergencies."},   
+    {q:"what is emergency communication protocol",a:"Protocol describing emergency communication methods."},   
+    {q:"what is fire protection inspection certificate",a:"Certificate confirming inspection completion."},   
+    {q:"what is safety risk assessment training",a:"Training about conducting risk assessments."},   
+    {q:"what is industrial fire emergency management",a:"Management of fire emergencies in industries."},   
+    {q:"what is fire hazard mitigation strategy",a:"Strategy used to reduce fire hazards."},   
+    {q:"what is workplace fire emergency preparedness plan",a:"Plan preparing workplace for fire emergencies."},   
+    {q:"what is fire prevention awareness campaign",a:"Campaign promoting fire prevention awareness."},   
+    {q:"what is emergency evacuation safety rule",a:"Rule guiding safe evacuation."},   
+    {q:"what is fire protection inspection standard",a:"Standard used during inspection of fire systems."},   
+    {q:"what is industrial emergency response coordination",a:"Coordination of industrial emergency response."},   
+    {q:"what is safety compliance improvement program",a:"Program improving workplace safety compliance."},   
+    {q:"what is fire safety emergency response plan",a:"Plan describing fire emergency response."},   
+    {q:"what is workplace hazard prevention strategy",a:"Strategy used to prevent hazards."},   
+    {q:"what is emergency rescue safety equipment",a:"Equipment used during rescue operations."},   
+    {q:"what is fire safety management system audit",a:"Audit verifying fire safety management system."},   
+    {q:"what is safety risk mitigation program",a:"Program reducing workplace risks."},   
+    {q:"what is emergency evacuation planning guide",a:"Guide for planning evacuation."},   
+    {q:"what is fire hazard control training",a:"Training on controlling fire hazards."},   
+    {q:"what is workplace emergency management system",a:"System managing workplace emergencies."},   
+    {q:"what is fire emergency safety compliance",a:"Compliance with fire safety regulations."},   
+    {q:"what is emergency safety coordination plan",a:"Plan coordinating emergency activities."},   
+    {q:"what is fire safety operational guideline",a:"Guideline describing fire safety operations."},   
+    {q:"what is safety inspection documentation",a:"Documentation of safety inspections."},   
+    {q:"what is industrial fire risk control system",a:"System used to control industrial fire risks."},   
+    {q:"what is fire safety continuous improvement plan",a:"Plan for continuous improvement in fire safety."},   
+    {q:"what is emergency response effectiveness evaluation",a:"Evaluation of emergency response performance."},   
+    {q:"what is fire protection operational procedure",a:"Procedure describing operation of fire systems."}   
+];   
+  
+const input=document.getElementById("search");   
+const suggestions=document.getElementById("suggestions");   
+const answer=document.getElementById("answer");   
+  
+input.addEventListener("input",function(){   
+    let value=input.value.toLowerCase();   
+    suggestions.innerHTML="";   
+    if(value==="") return;   
+    database.forEach(item=>{   
+        if(item.q.includes(value)){   
+            let div=document.createElement("div");   
+            div.innerText=item.q;   
+            div.onclick=function(){   
+                input.value=item.q;   
+                suggestions.innerHTML="";   
+                answer.innerHTML=item.a;   
+            };   
+            suggestions.appendChild(div);   
+        }   
+    });   
+});  
+</script>  </body>  
+</html>  

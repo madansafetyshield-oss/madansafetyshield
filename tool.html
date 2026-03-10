@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="theme.css">
+
+<title>Madan Safety Shield Fire Safety Analyzer</title>
+
+<style>
+
+/* BACK BUTTON */
+
+.back-btn{
+
+position:fixed;
+top:0px;
+left:0px;
+
+background:black;
+color:red;
+
+padding:4px 4px;
+
+font-size:20px;
+
+font-weight:bold;
+
+text-decoration:none;
+
+border:2px solid red;
+
+border-radius:8px;
+
+z-index:999;
+
+text-shadow:
+0 0 10px red,
+0 0 20px red,
+0 0 30px orange;
+
+box-shadow:
+0 0 10px red,
+0 0 20px red;
+
+transition:0.3s;
+
+}
+
+.back-btn:hover{
+
+background:red;
+color:white;
+
+text-shadow:
+0 0 10px white,
+0 0 20px red,
+0 0 30px orange;
+
+}
+
+body{
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+margin:0;
+text-align:center;
+}
+
+header{
+background:black;
+padding:20px;
+border-bottom:2px solid red;
+}
+
+.container{
+padding:40px 10%;
+}
+
+.box{
+background:#1a1a1a;
+padding:30px;
+border-radius:8px;
+max-width:700px;
+margin:auto;
+}
+
+input,select{
+padding:10px;
+margin:10px;
+width:250px;
+}
+
+button{
+background:red;
+color:white;
+border:none;
+padding:12px 30px;
+cursor:pointer;
+}
+
+.report{
+margin-top:30px;
+background:#111;
+padding:25px;
+border-radius:6px;
+text-align:left;
+line-height:1.8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="back-btn">
+⬅ BACK
+</a>
+
+<header>
+<h2>Madan Safety Shield Fire Safety Analyzer</h2>
+</header>
+
+<div class="container">
+
+<div class="box">
+
+<h3>Client Details</h3>
+
+<input id="name" placeholder="Client Name"><br>
+<input id="company" placeholder="Company Name"><br>
+<input id="phone" placeholder="Client Phone Number"><br>
+
+<h3>Building Type</h3>
+
+<select id="building">
+
+<option>Residential Apartment</option>
+<option>Office Building</option>
+<option>Shopping Mall</option>
+<option>Hospital</option>
+<option>Hotel</option>
+<option>Warehouse</option>
+<option>Factory</option>
+<option>School</option>
+<option>College</option>
+<option>Restaurant</option>
+<option>Cinema Theatre</option>
+<option>Data Center</option>
+<option>Chemical Plant</option>
+<option>Petrol Pump</option>
+<option>Industrial Plant</option>
+<option>Textile Factory</option>
+<option>Cold Storage</option>
+<option>IT Park</option>
+<option>Logistics Warehouse</option>
+<option>Pharmaceutical Plant</option>
+
+</select>
+
+<h3>Hazard Type</h3>
+
+<select id="hazard">
+
+<option>Electrical Equipment</option>
+<option>Flammable Liquids</option>
+<option>Gas Storage</option>
+<option>Chemical Storage</option>
+<option>Plastic Storage</option>
+<option>Paper Storage</option>
+<option>Fuel Storage</option>
+<option>Cooking Operations</option>
+<option>High Heat Machinery</option>
+<option>Battery Storage</option>
+<option>Server Equipment</option>
+<option>Textile Materials</option>
+<option>Dust Explosion Risk</option>
+<option>Wood Storage</option>
+<option>Paint Storage</option>
+<option>Solvent Handling</option>
+<option>Rubber Processing</option>
+<option>Packaging Materials</option>
+<option>Mixed Industrial Hazard</option>
+<option>Unknown Hazard</option>
+
+</select>
+
+<br>
+
+<input id="floors" type="number" placeholder="Number of Floors"><br>
+<input id="area" type="number" placeholder="Building Area (sqft)"><br>
+
+<button onclick="generate()">Generate Fire Safety Report</button>
+
+<div id="report" class="report"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function generate(){
+
+let name=document.getElementById("name").value.trim();
+let company=document.getElementById("company").value.trim();
+let phone=document.getElementById("phone").value.trim();
+
+let building=document.getElementById("building").value;
+let hazard=document.getElementById("hazard").value;
+
+let floors=parseInt(document.getElementById("floors").value);
+let area=parseInt(document.getElementById("area").value);
+
+if(name=="" || company=="" || phone=="" || !floors || !area){
+alert("Please fill all fields");
+return;
+}
+
+if(!/^[0-9]{10}$/.test(phone)){
+alert("Phone number must be 10 digits");
+return;
+}
+
+let hazardScore=1;
+
+if(hazard.includes("Flammable")||hazard.includes("Fuel")) hazardScore=4;
+if(hazard.includes("Chemical")||hazard.includes("Gas")) hazardScore=5;
+if(hazard.includes("Electrical")) hazardScore=3;
+
+let buildingScore=1;
+
+if(building.includes("Factory")||building.includes("Plant")) buildingScore=4;
+if(building.includes("Petrol")||building.includes("Chemical")) buildingScore=5;
+
+let riskScore=(floors*2)+(area/10000)+(hazardScore*3)+(buildingScore*2);
+
+let risk="LOW";
+
+if(riskScore>20) risk="MEDIUM";
+if(riskScore>30) risk="HIGH";
+if(riskScore>40) risk="EXTREME";
+
+let extinguishers=Math.ceil(area/200);
+let smoke=Math.ceil(area/900);
+let mcp=Math.ceil(area/5000);
+let hooter=Math.ceil(area/6000);
+let exitLight=Math.ceil(area/1000);
+let zones=Math.ceil(area/20000);
+let evacuation=Math.ceil(floors);
+
+let reportText=`
+
+🔥 Fire Safety Assessment Report
+Madan Safety Shield
+
+Client : ${name}
+Company : ${company}
+Client Phone : ${phone}
+
+Building Type : ${building}
+Hazard Type : ${hazard}
+
+Floors : ${floors}
+Area : ${area} sqft
+
+Risk Level : ${risk}
+
+Recommended Fire Protection Systems
+
+Fire Extinguishers : ${extinguishers}
+Smoke Detectors : ${smoke}
+Manual Call Points : ${mcp}
+Alarm Hooters : ${hooter}
+Emergency Exit Lights : ${exitLight}
+Fire Alarm Panel Zones : ${zones}
+Evacuation Plans : ${evacuation}
+
+Generated By
+Madan Safety Shield
+Mobile : 8015828265
+
+`;
+
+document.getElementById("report").innerHTML=reportText.replace(/\n/g,"<br>");
+
+let whatsapp="https://wa.me/918015828265?text="+encodeURIComponent(reportText);
+
+window.open(whatsapp,"_blank");
+
+}
+
+</script>
+
+</body>
+</html>

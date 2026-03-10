@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="theme.css">
+<title>Fire Safety Audit Tool | Madan Safety Shield</title>
+
+<style>
+
+/* BACK BUTTON */
+
+.back-btn{
+
+position:fixed;
+top:0px;
+left:0px;
+
+background:black;
+color:red;
+
+padding:4px 4px;
+
+font-size:20px;
+
+font-weight:bold;
+
+text-decoration:none;
+
+border:2px solid red;
+
+border-radius:8px;
+
+z-index:999;
+
+text-shadow:
+0 0 10px red,
+0 0 20px red,
+0 0 30px orange;
+
+box-shadow:
+0 0 10px red,
+0 0 20px red;
+
+transition:0.3s;
+
+}
+
+.back-btn:hover{
+
+background:red;
+color:white;
+
+text-shadow:
+0 0 10px white,
+0 0 20px red,
+0 0 30px orange;
+
+}
+
+/* ORIGINAL PAGE STYLE */
+
+body{
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+margin:0;
+padding:40px;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+background:#1a1a1a;
+padding:30px;
+border-radius:8px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:4px;
+}
+
+button{
+background:red;
+color:white;
+padding:15px 35px;
+border:none;
+cursor:pointer;
+border-radius:5px;
+font-size:16px;
+margin-top:20px;
+}
+
+.result{
+margin-top:20px;
+background:#111;
+padding:15px;
+border-radius:5px;
+}
+
+h2{
+margin-top:25px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="back-btn">⬅ BACK</a>
+
+<div class="container">
+
+<h1>Fire Safety Audit Tool</h1>
+
+<h2>Client Details</h2>
+
+<input id="name" placeholder="Name">
+
+<input id="company" placeholder="Company Name">
+
+<input id="mobile" placeholder="Mobile Number">
+
+
+<h2>Building Details</h2>
+
+<select id="building">
+
+<option>Factory</option>
+<option>Warehouse</option>
+<option>Commercial Building</option>
+<option>Hospital</option>
+<option>Shopping Mall</option>
+<option>Apartment</option>
+
+</select>
+
+<input id="area" type="number" placeholder="Building Area (sq ft)">
+<input id="floors" type="number" placeholder="Number of Floors">
+<input id="occupancy" type="number" placeholder="No of People Occupancy">
+
+
+<h2>Fire Alarm System</h2>
+
+<input id="extinguisher" type="number" placeholder="No of Fire Extinguishers">
+<input id="smoke" type="number" placeholder="No of Smoke Detectors">
+<input id="mcp" type="number" placeholder="No of Call Points">
+<input id="hooter" type="number" placeholder="No of Hooters">
+<input id="siren" type="number" placeholder="No of Sirens">
+<input id="light" type="number" placeholder="No of Emergency Lights">
+<input id="panel" type="number" placeholder="Fire Alarm Panel Zones">
+
+
+<h2>Hydrant System Details</h2>
+
+<input id="pump" type="number" placeholder="No of Fire Pumps">
+<input id="valve" type="number" placeholder="Landing Valves">
+<input id="hose" type="number" placeholder="Hose Pipes">
+<input id="reel" type="number" placeholder="Hose Reels">
+<input id="tank" type="number" placeholder="Fire Water Tank Capacity (litres)">
+
+
+<button onclick="generate()">Generate Fire Safety Report</button>
+
+<div id="result" class="result"></div>
+
+</div>
+
+
+<script>
+
+function generate(){
+
+let name=document.getElementById("name").value;
+let company=document.getElementById("company").value;
+let mobile=document.getElementById("mobile").value;
+
+let building=document.getElementById("building").value;
+let area=parseInt(document.getElementById("area").value)||0;
+let floors=parseInt(document.getElementById("floors").value)||0;
+
+let extinguisher=parseInt(document.getElementById("extinguisher").value)||0;
+let smoke=parseInt(document.getElementById("smoke").value)||0;
+let mcp=parseInt(document.getElementById("mcp").value)||0;
+let hooter=parseInt(document.getElementById("hooter").value)||0;
+let siren=parseInt(document.getElementById("siren").value)||0;
+let light=parseInt(document.getElementById("light").value)||0;
+let panel=parseInt(document.getElementById("panel").value)||0;
+
+let pump=parseInt(document.getElementById("pump").value)||0;
+let valve=parseInt(document.getElementById("valve").value)||0;
+let hose=parseInt(document.getElementById("hose").value)||0;
+let reel=parseInt(document.getElementById("reel").value)||0;
+let tank=parseInt(document.getElementById("tank").value)||0;
+
+let score=0;
+let suggestion="";
+
+
+if(extinguisher>=Math.ceil(area/3000)) score+=15;
+else suggestion+="• Increase Fire Extinguishers\n";
+
+if(smoke>=Math.ceil(area/500)) score+=15;
+else suggestion+="• Install additional Smoke Detectors\n";
+
+if(mcp>=floors) score+=10;
+else suggestion+="• Provide MCP on every floor\n";
+
+if(light>=floors) score+=10;
+else suggestion+="• Install Emergency Exit Lights\n";
+
+if(panel>=1) score+=10;
+else suggestion+="• Install Fire Alarm Control Panel\n";
+
+if(pump>=1) score+=10;
+else suggestion+="• Install Fire Hydrant Pump\n";
+
+if(valve>=floors) score+=10;
+else suggestion+="• Provide Landing Valves in each floor\n";
+
+if(hose>=valve) score+=10;
+else suggestion+="• Provide Hose Pipes for hydrant valves\n";
+
+if(reel>=1) score+=5;
+else suggestion+="• Install Hose Reel System\n";
+
+if(tank>=20000) score+=5;
+else suggestion+="• Increase Fire Water Storage Tank\n";
+
+
+let level="";
+
+if(score>=80) level="🟢 Good Fire Safety Level";
+else if(score>=50) level="🟡 Moderate Risk";
+else level="🔴 High Fire Risk";
+
+
+let report=
+
+"🔥 FIRE SAFETY AUDIT REPORT\n\n"+
+
+"Name: "+name+"\n"+
+"Company: "+company+"\n"+
+"Mobile: "+mobile+"\n\n"+
+
+"Building Type: "+building+"\n"+
+"Area: "+area+" sq ft\n"+
+"Floors: "+floors+"\n\n"+
+
+"Fire Safety Score: "+score+"%\n"+
+"Status: "+level+"\n\n"+
+
+"Improvement Suggestions:\n"+suggestion+
+
+"\n\nGenerated by Madan Safety Shield";
+
+
+document.getElementById("result").innerHTML=
+report.replace(/\n/g,"<br>");
+
+let whatsapp="https://wa.me/918015828265?text="+encodeURIComponent(report);
+
+window.open(whatsapp,"_blank");
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fire Hydrant Design Tool | Madan Safety Shield</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+margin:0;
+padding:40px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:#1a1a1a;
+padding:30px;
+border-radius:10px;
+}
+
+h1{
+text-align:center;
+color:#ff3b3b;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:4px;
+}
+
+button{
+background:red;
+color:white;
+padding:14px 35px;
+border:none;
+cursor:pointer;
+border-radius:5px;
+font-size:16px;
+margin-top:15px;
+}
+
+.report{
+display:none;
+margin-top:25px;
+background:#111;
+padding:25px;
+border-radius:6px;
+line-height:1.7;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+table,th,td{
+border:1px solid #444;
+}
+
+th,td{
+padding:8px;
+text-align:center;
+}
+
+.back-btn{
+position:fixed;
+top:10px;
+left:10px;
+background:black;
+color:red;
+padding:6px 12px;
+font-size:18px;
+font-weight:bold;
+text-decoration:none;
+border:2px solid red;
+border-radius:8px;
+}
+
+.share-box{
+text-align:center;
+margin-top:20px;
+}
+
+.note{
+font-size:14px;
+color:#ccc;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="home.html" class="back-btn">⬅ BACK</a>
+
+<div class="container">
+
+<h1>Fire Hydrant System Design Tool</h1>
+
+<h3>Client Details</h3>
+
+<input id="name" placeholder="Client Name">
+<input id="company" placeholder="Company Name">
+<input id="mobile" placeholder="Mobile Number">
+
+<h3>Building Details</h3>
+
+<select id="building">
+<option>Factory</option>
+<option>Warehouse</option>
+<option>Shopping Mall</option>
+<option>Hospital</option>
+<option>Hotel</option>
+<option>School</option>
+<option>College</option>
+<option>Apartment</option>
+<option>Office Building</option>
+<option>Cinema Theatre</option>
+<option>Textile Factory</option>
+<option>Chemical Industry</option>
+<option>Petrol Pump</option>
+<option>Cold Storage</option>
+<option>IT Park</option>
+</select>
+
+<input id="area" type="number" placeholder="Area Per Floor (sq.ft)">
+<input id="floors" type="number" placeholder="Number of Floors">
+
+<button onclick="generate()">Generate Hydrant Report</button>
+
+<div class="share-box" id="shareSection" style="display:none">
+
+<button onclick="shareReport()">Share Report</button>
+
+<p class="note">
+Please share to Madan Safety. After sharing you will be able to view the report.
+</p>
+
+</div>
+
+<div id="result" class="report"></div>
+
+</div>
+
+<script>
+
+let fullReportText=""
+
+function generate(){
+
+document.getElementById("shareSection").style.display="block"
+
+let name=document.getElementById("name").value
+let company=document.getElementById("company").value
+let mobile=document.getElementById("mobile").value
+let building=document.getElementById("building").value
+
+let area=parseInt(document.getElementById("area").value)||0
+let floors=parseInt(document.getElementById("floors").value)||0
+
+let sqm=(area/10.764).toFixed(2)
+
+let hydrant=Math.ceil(area/9000)
+
+let totalHydrant=hydrant*floors
+
+let totalArea=area*floors
+
+let landing=totalHydrant
+let hose=totalHydrant
+let reel=totalHydrant
+let hosebox=totalHydrant
+
+let hydrantNote="Hydrant system optional"
+
+if(sqm>500){
+hydrantNote="Hydrant system recommended as per NBC fire safety guideline"
+}
+
+let motor="10 HP"
+
+if(totalArea<=30000){
+motor="10 HP"
+}
+else if(totalArea<=50000){
+motor="12.5 HP"
+}
+else if(totalArea<=70000){
+motor="15 HP"
+}
+else if(totalArea<=100000){
+motor="20 HP"
+}
+else{
+motor="25 HP"
+}
+
+let ugTank="20000 Litres"
+let terrace="5000 Litres"
+
+if(totalArea>30000){
+ugTank="50000 Litres"
+terrace="10000 Litres"
+}
+
+if(totalArea>70000){
+ugTank="75000 Litres"
+terrace="15000 Litres"
+}
+
+if(totalArea>100000){
+ugTank="100000 Litres"
+terrace="20000 Litres"
+}
+
+fullReportText=
+
+"🔥 FIRE HYDRANT SYSTEM BASIC DESIGN REPORT\n\n"+
+
+"1. Client Details\n"+
+"Client Name : "+name+"\n"+
+"Company : "+company+"\n"+
+"Mobile : "+mobile+"\n"+
+"Building Type : "+building+"\n\n"+
+
+"2. Building Information\n"+
+"Area Per Floor : "+area+" sq.ft\n"+
+"Floors : "+floors+"\n"+
+"Total Area : "+totalArea+" sq.ft\n"+
+"Area in sq.m : "+sqm+"\n\n"+
+
+"3. Hydrant Requirement\n"+
+hydrantNote+"\n\n"+
+
+"4. Hydrant Calculation\n"+
+"Hydrant per Floor : "+hydrant+" Nos\n"+
+"Total Hydrant Valves : "+totalHydrant+" Nos\n\n"+
+
+"5. Hydrant Equipment Requirement\n"+
+"Landing Valve : "+landing+" Nos\n"+
+"Fire Hose 30m : "+hose+" Nos\n"+
+"Hose Reel Drum : "+reel+" Nos\n"+
+"Hose Box : "+hosebox+" Nos\n"+
+"Branch Pipe : "+totalHydrant+" Nos\n"+
+"Nozzle : "+totalHydrant+" Nos\n\n"+
+
+"6. Fire Pump Recommendation\n"+
+"Recommended Pump Motor : "+motor+"\n"+
+"Approx Pump Capacity : 900 LPM\n\n"+
+
+"7. Fire Water Storage Requirement\n"+
+"Underground Tank : "+ugTank+"\n"+
+"Terrace Tank : "+terrace+"\n\n"+
+
+"8. Design Basis\n"+
+"Hose Length : 30 m\n"+
+"Jet Throw : 6 m\n"+
+"Total Reach : 36 m\n"+
+"Coverage per Hydrant : 800 – 1000 sq.m\n\n"+
+
+"9. Important Note\n"+
+"Final hydrant system design may vary after detailed site inspection and fire department approval.\n\n"+
+
+"10. Prepared By\n"+
+"MADAN SAFETY SHIELD\n"+
+"Fire Safety Equipment Supplier\n"+
+"Mobile : 8015828265"
+
+document.getElementById("result").innerHTML=fullReportText.replace(/\n/g,"<br>")
+
+}
+
+function shareReport(){
+
+let whatsapp="https://wa.me/918015828265?text="+encodeURIComponent(fullReportText)
+
+window.open(whatsapp,"_blank")
+
+document.getElementById("result").style.display="block"
+
+}
+
+</script>
+
+</body>
+</html>

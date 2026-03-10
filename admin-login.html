@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Admin Login | Madan Safety Shield</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+.box{
+background:#1a1a1a;
+padding:30px;
+max-width:400px;
+margin:auto;
+border-radius:8px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+}
+
+button{
+background:red;
+color:white;
+padding:10px 20px;
+border:none;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Admin Login</h2>
+
+<input id="user" placeholder="Username">
+
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+</div>
+
+<script>
+
+function login(){
+
+let user=document.getElementById("user").value;
+let pass=document.getElementById("pass").value;
+
+if(user=="admin" && pass=="madansafety@123"){
+
+window.location="admin-dashboard.html";
+
+}
+
+else{
+
+alert("Wrong login");
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
