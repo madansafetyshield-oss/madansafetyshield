@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -364,18 +363,70 @@ margin-top:40px;
 
 /* CARD */
 
-.card{
-background:#111;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,0.5);
-}
-
 .card img{
 width:100%;
 height:220px;
 object-fit:cover;
+
+animation:imageZoom 4s infinite ease-in-out;
 }
+@keyframes cardBounce{
+
+0%{
+transform:translateY(0);
+}
+
+40%{
+transform:translateY(-50px);
+}
+
+60%{
+transform:translateY(-50px);
+}
+
+100%{
+transform:translateY(0);
+}
+
+}
+
+.card{
+animation:cardBounce 10s infinite;
+}
+
+}
+
+.card{
+animation:cardJump 1s ease;
+animation-fill-mode:forwards;
+}
+
+}
+
+.grid .card:nth-child(1){ animation-delay:0s; }
+
+.grid .card:nth-child(2){ animation-delay:1s; }
+
+.grid .card:nth-child(3){ animation-delay:2s; }
+
+.grid .card:nth-child(4){ animation-delay:3s; }
+
+.grid .card:nth-child(5){ animation-delay:4s; }
+
+.grid .card:nth-child(6){ animation-delay:5s; }
+
+.grid .card:nth-child(7){ animation-delay:6s; }
+
+.grid .card:nth-child(8){ animation-delay:7s; }
+
+.grid .card:nth-child(9){ animation-delay:8s; }
+
+.grid .card:nth-child(10){ animation-delay:9s; }
+
+}
+
+}
+
 
 .card-content{
 padding:20px;
@@ -462,7 +513,61 @@ text-align:center;
 padding:20px;
 border-top:1px solid #222;
 }
+.chatbox{
 
+position:fixed;
+bottom:20px;
+left:20px;
+width:160px;
+background:#111;
+border-radius:10px;
+box-shadow:0 0 20px rgba(0,0,0,0.5);
+padding:15px;
+z-index:9999;
+
+animation:chatPopup 1s ease;
+}
+
+.chat-header{
+font-weight:bold;
+margin-bottom:10px;
+color:#00ffcc;
+}
+
+.chatbox textarea{
+width:100%;
+height:80px;
+border:none;
+padding:8px;
+border-radius:5px;
+margin-bottom:10px;
+resize:none;
+}
+
+.chatbox button{
+width:100%;
+background:#25D366;
+color:white;
+border:none;
+padding:10px;
+border-radius:5px;
+font-weight:bold;
+cursor:pointer;
+}
+
+@keyframes chatPopup{
+
+0%{
+transform:translateY(100px);
+opacity:0;
+}
+
+100%{
+transform:translateY(0);
+opacity:1;
+}
+
+}
 </style>
 
 </head>
@@ -473,6 +578,18 @@ border-top:1px solid #222;
 
 <div class="logo">
 <img src="https://i.ibb.co/hRscn593/file-00000000e4a471fa8e7aaff8a90f2e34.png">
+</div>
+
+<div class="chatbox">
+
+<div class="chat-header">
+Need Help? Chat With Us
+</div>
+
+<textarea id="chatMessage" placeholder="Type your message..."></textarea>
+
+<button onclick="sendMessage()">Send</button>
+
 </div>
 
 <div class="company">
@@ -607,15 +724,23 @@ DJ FOREVER IN EVERYWHERE
 <h2>About Madan Safety Shield</h2>
 
 <p>
-Madan Safety Shield is a trusted fire safety equipment supplier and service provider in Tamil Nadu.
-We provide professional fire protection solutions including fire extinguishers, fire alarm systems,
-hydrant systems, safety inspection and industrial safety equipment supply.
-</p>
+Madan Safety Shield is a trusted fire safety equipment supplier and service provider dedicated to protecting lives, property and businesses through reliable fire protection solutions. Based in Tamil Nadu, we provide professional fire safety services in Tirunelveli, Tiruppur and surrounding regions. Our goal is to improve fire safety awareness and provide high quality fire protection systems for residential buildings, commercial establishments and industrial facilities.
 
-<p>
-Our mission is to deliver reliable fire safety solutions that protect people, property and businesses.
-We focus on quality products, affordable pricing and dependable service for every client.
-Customer safety and satisfaction are always our highest priorities.
+Fire accidents can occur at any time and often cause serious damage to property and life. Proper fire safety equipment and preventive measures are essential to reduce fire risks. Madan Safety Shield focuses on delivering dependable fire safety products and services that help businesses and individuals stay protected and prepared.
+
+Our services include supply and installation of fire extinguishers, fire alarm systems, fire hydrant systems and industrial safety equipment. We also provide fire extinguisher refilling, fire safety inspection, safety audits and annual maintenance contract services. Each service is carried out with careful attention to safety standards and customer requirements.
+
+We supply a wide range of fire extinguishers including ABC powder extinguishers, CO2 extinguishers, foam extinguishers and water based extinguishers suitable for different types of fire hazards. Our team helps customers choose the correct fire protection equipment depending on their building type, fire risk level and safety regulations.
+
+Madan Safety Shield also provides professional fire alarm system installation including smoke detectors, manual call points, control panels and alarm notification devices. Early fire detection is one of the most important elements in fire safety, and our alarm systems are designed to provide fast and reliable alerts during emergency situations.
+
+For larger buildings and industrial environments, we design and install complete fire hydrant systems. These systems ensure that adequate water supply is available to control and suppress fires quickly. Our hydrant installation services include planning, pipe installation, pump systems and routine maintenance.
+
+In addition to fire protection systems, we supply personal protective equipment and industrial safety products such as safety helmets, gloves, protective gear and workplace safety equipment. These products help ensure safe working environments for employees and workers in different industries.
+
+Customer safety and satisfaction remain our highest priorities. We believe that effective fire safety is not just about equipment but also about awareness, training and proper maintenance. By providing reliable products, professional service and technical support, Madan Safety Shield aims to become a trusted fire safety partner for businesses and communities.
+
+Our mission is simple: to protect lives and property by delivering dependable fire safety solutions and promoting fire safety awareness across every workplace and building.
 </p>
 
 </section>
