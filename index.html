@@ -310,8 +310,12 @@ font-size:16px;
 
 /* HERO */
 
+/* HERO */
+
 .hero{
-height:80vh;
+
+min-height:45vh;
+padding:50px 20px;
 
 display:flex;
 flex-direction:column;
@@ -777,6 +781,27 @@ Our mission is simple: to protect lives and property by delivering dependable fi
 <a href="tel:8015828265" class="float call">
 <i class="fas fa-phone"></i>
 </a>
+<script>
 
+function sendMessage(){
+
+var message = document.getElementById("chatMessage").value;
+
+if(message.trim()==""){
+alert("Please type message");
+return;
+}
+
+var phone="918015828265";
+
+var text = "New enquiry from website:%0A%0A" + message;
+
+var url="https://wa.me/"+phone+"?text="+encodeURIComponent(text);
+
+window.open(url,"_blank");
+
+}
+
+</script>
 </body>
 </html>
